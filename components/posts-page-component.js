@@ -1,9 +1,9 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { user, posts, goToPage } from "../index.js";
+import { getPosts, likePost, dislikePost } from "../api.js";
 
-export function renderPostsPageComponent({ appEl }) {
-  // @TODO: реализовать рендер постов из api
+export function renderPostsPageComponent({ appEl, token }) {
   console.log("Актуальный список постов:", posts);
 
   const formatDate = (dateStr) => {
@@ -26,9 +26,15 @@ export function renderPostsPageComponent({ appEl }) {
     return div.innerHTML;
   };
 
+  const isPostLikedByMe = (post) => {
+    if (!user) return false;
+    return post.likes.some((like) => like.id === user.id);
+  };
+
   const getLikeImage = (post) => {
-    // @TODO: позже будем проверять, лайкнул ли текущий пользователь
-    return "./assets/images/like-not-active.svg";
+    return isPostLikedByMe(post)
+      ? "./assets/images/like-active.svg"
+      : "./assets/images/like-not-active.svg";
   };
 
   const appHtml = `
@@ -84,6 +90,37 @@ export function renderPostsPageComponent({ appEl }) {
       goToPage(USER_POSTS_PAGE, {
         userId: userEl.dataset.userId,
       });
+    });
+  }
+
+  for (let likeButton of document.querySelectorAll(".like-button")) {
+    likeButton.addEventListener("click", () => {
+      if (!user) {
+        alert("Авторизуйтесь, чтобы ставить лайки");
+        return;
+      }
+
+      const postId = likeButton.dataset.postId;
+      const post = posts.find((p) => p.id === postId);
+      if (!post) return;
+
+      const isLiked = isPostLikedByMe(post);
+
+      const likePromise = isLiked
+        ? dislikePost({ token, postId })
+        : likePost({ token, postId });
+
+      likePromise
+        .then(() => getPosts({ token }))
+        .then((newPosts) => {
+          posts.length = 0;
+          posts.push(...newPosts);
+          renderPostsPageComponent({ appEl, token });
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Не удалось обновить лайк");
+        });
     });
   }
 }
