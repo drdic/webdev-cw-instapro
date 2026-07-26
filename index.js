@@ -46,7 +46,6 @@ export const goToPage = (newPage, data) => {
     ].includes(newPage)
   ) {
     if (newPage === ADD_POSTS_PAGE) {
-      /* Если пользователь не авторизован, то отправляем его на страницу авторизации перед добавлением поста */
       page = user ? ADD_POSTS_PAGE : AUTH_PAGE;
       return renderApp();
     }
@@ -85,7 +84,6 @@ export const goToPage = (newPage, data) => {
 
     page = newPage;
     renderApp();
-
     return;
   }
 
