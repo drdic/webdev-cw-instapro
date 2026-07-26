@@ -27,8 +27,7 @@ export function renderUserPostsPageComponent({ appEl, token }) {
   };
 
   const isPostLikedByMe = (post) => {
-    if (!user) return false;
-    return post.likes.some((like) => like.id === user.id);
+    return post.isLiked === true;
   };
 
   const getLikeImage = (post) => {
@@ -59,7 +58,7 @@ export function renderUserPostsPageComponent({ appEl, token }) {
         ${posts
           .map(
             (post) => `
-          <li class="post">
+                  <li class="post">
             <div class="post-header" data-user-id="${escapeHtml(post.user.id)}">
               <img src="${escapeHtml(
                 post.user.imageUrl ||
@@ -116,9 +115,10 @@ export function renderUserPostsPageComponent({ appEl, token }) {
       }
 
       const postId = likeButton.dataset.postId;
-      const post = posts.find((p) => p.id === postId);
-      if (!post) return;
+      const postIndex = posts.findIndex((p) => p.id === postId);
+      if (postIndex === -1) return;
 
+      const post = posts[postIndex];
       const isLiked = isPostLikedByMe(post);
 
       const likePromise = isLiked
@@ -126,10 +126,8 @@ export function renderUserPostsPageComponent({ appEl, token }) {
         : likePost({ token, postId });
 
       likePromise
-        .then(() => getPostsByUser({ token, userId }))
-        .then((newPosts) => {
-          posts.length = 0;
-          posts.push(...newPosts);
+        .then((updatedPost) => {
+          posts[postIndex] = updatedPost;
           renderUserPostsPageComponent({ appEl, token });
         })
         .catch((error) => {
