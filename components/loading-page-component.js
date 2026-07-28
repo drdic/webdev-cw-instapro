@@ -1,9 +1,3 @@
-
-
-    },
-      }
-}
-
 export function getPostsByUser({ token, userId }) {
   return fetch(`${postsHost}/user-posts/${userId}`, {
     method: "GET",
