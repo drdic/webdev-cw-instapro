@@ -43,7 +43,7 @@ export function renderUserPostsPageComponent({ appEl, token }) {
         <div class="col-12 d-flex align-items-center gap-3">
           <img src="${escapeHtml(
             posts[0].user.imageUrl ||
-              "https://i.pravatar.cc/70?u=" + posts[0].user.id,
+              "https://i.pravatar.cc/70?u=" + posts[0].user.id
           )}" class="rounded-circle" width="70" height="70" style="object-fit: cover;">
           <h2 class="fs-1 fw-semibold m-0">${escapeHtml(posts[0].user.name)}</h2>
         </div>
@@ -64,12 +64,12 @@ export function renderUserPostsPageComponent({ appEl, token }) {
               <div class="card-header d-flex align-items-center gap-2 bg-white border-0" data-user-id="${escapeHtml(post.user.id)}" style="cursor: pointer;">
                 <img src="${escapeHtml(
                   post.user.imageUrl ||
-                    "https://i.pravatar.cc/40?u=" + post.user.id,
+                    "https://i.pravatar.cc/40?u=" + post.user.id
                 )}" class="rounded-circle" width="40" height="40" style="object-fit: cover;">
                 <span class="fw-semibold">${escapeHtml(post.user.name)}</span>
               </div>
-              <div class="bg-light d-flex justify-content-center" style="height: 500px;">
-                <img class="card-img-top" src="${escapeHtml(post.imageUrl)}" style="max-width: 500px; width: 100%; height: 100%; object-fit: cover;">
+              <div class="bg-light d-flex justify-content-center">
+                <img class="img-fluid" src="${escapeHtml(post.imageUrl)}" style="max-width: 500px; width: 100%;">
               </div>
               <div class="card-body">
                 <div class="d-flex align-items-center gap-1 mb-2">

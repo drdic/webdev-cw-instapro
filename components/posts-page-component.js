@@ -50,8 +50,8 @@ export function renderPostsPageComponent({ appEl, token }) {
                 )}" class="rounded-circle" width="40" height="40" style="object-fit: cover;">
                 <span class="fw-semibold">${escapeHtml(post.user.name)}</span>
               </div>
-              <div class="bg-light d-flex justify-content-center" style="height: 500px;">
-                <img class="card-img-top" src="${escapeHtml(post.imageUrl)}" style="max-width: 500px; width: 100%; height: 100%; object-fit: cover;">
+              <div class="bg-light d-flex justify-content-center">
+                <img class="img-fluid" src="${escapeHtml(post.imageUrl)}" style="max-width: 500px; width: 100%;">
               </div>
               <div class="card-body">
                 <div class="d-flex align-items-center gap-1 mb-2">
