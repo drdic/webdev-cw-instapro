@@ -8,39 +8,45 @@ export function renderAuthPageComponent({ appEl, setUser }) {
 
   const renderForm = () => {
     const appHtml = `
-      <div class="page-container">
+      <div class="container py-3">
           <div class="header-container"></div>
-          <div class="form">
-              <h3 class="form-title">
-                ${
-                  isLoginMode
-                    ? "Вход в&nbsp;Instapro"
-                    : "Регистрация в&nbsp;Instapro"
-                }
-              </h3>
-              <div class="form-inputs">
-                  ${
-                    !isLoginMode
-                      ? `
-                      <div class="upload-image-container"></div>
-                      <input type="text" id="name-input" class="input" placeholder="Имя" />
-                      `
-                      : ""
-                  }
-                  <input type="text" id="login-input" class="input" placeholder="Логин" />
-                  <input type="password" id="password-input" class="input" placeholder="Пароль" />
-                  <div class="form-error"></div>
-                  <button class="button" id="login-button">${
-                    isLoginMode ? "Войти" : "Зарегистрироваться"
-                  }</button>
-              </div>
-              <div class="form-footer">
-                <p class="form-footer-title">
-                  ${isLoginMode ? "Нет аккаунта?" : "Уже есть аккаунт?"}
-                  <button class="link-button" id="toggle-button">
-                    ${isLoginMode ? "Зарегистрироваться." : "Войти."}
-                  </button>
-                </p>
+          <div class="row justify-content-center">
+              <div class="col-12 col-md-6 col-lg-4">
+                  <div class="card shadow-sm">
+                      <div class="card-body">
+                          <h3 class="card-title text-center fs-2 fw-semibold mb-4">
+                            ${
+                              isLoginMode
+                                ? "Вход в Instapro"
+                                : "Регистрация в Instapro"
+                            }
+                          </h3>
+                          <div class="d-flex flex-column gap-3">
+                              ${
+                                !isLoginMode
+                                  ? `
+                                  <div class="upload-image-container"></div>
+                                  <input type="text" id="name-input" class="form-control" placeholder="Имя" />
+                                  `
+                                  : ""
+                              }
+                              <input type="text" id="login-input" class="form-control" placeholder="Логин" />
+                              <input type="password" id="password-input" class="form-control" placeholder="Пароль" />
+                              <div id="form-error" class="text-danger small"></div>
+                              <button class="btn btn-primary w-100" id="login-button">${
+                                isLoginMode ? "Войти" : "Зарегистрироваться"
+                              }</button>
+                          </div>
+                          <div class="text-center mt-4">
+                            <p class="mb-0">
+                              ${isLoginMode ? "Нет аккаунта?" : "Уже есть аккаунт?"}
+                              <button class="btn btn-link p-0 align-baseline" id="toggle-button">
+                                ${isLoginMode ? "Зарегистрироваться." : "Войти."}
+                              </button>
+                            </p>
+                          </div>
+                      </div>
+                  </div>
               </div>
           </div>
       </div>    
@@ -49,7 +55,7 @@ export function renderAuthPageComponent({ appEl, setUser }) {
     appEl.innerHTML = appHtml;
 
     const setError = (message) => {
-      appEl.querySelector(".form-error").textContent = message;
+      appEl.querySelector("#form-error").textContent = message;
     };
 
     renderHeaderComponent({

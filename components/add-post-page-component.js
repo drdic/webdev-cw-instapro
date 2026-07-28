@@ -6,20 +6,22 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
   const render = () => {
     const appHtml = `
-      <div class="page-container">
+      <div class="container py-3">
         <div class="header-container"></div>
-        <div class="form">
-          <h3 class="form-title">Добавить пост</h3>
-          <div class="form-inputs">
-            <div class="upload-image-container"></div>
-            <textarea
-              class="textarea input"
-              id="description-input"
-              placeholder="Введите описание поста"
-              rows="4"
-            ></textarea>
-            <div class="form-error"></div>
-            <button class="button" id="add-button">Добавить</button>
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-6">
+            <h3 class="text-center fs-2 fw-semibold mb-4">Добавить пост</h3>
+            <div class="d-flex flex-column gap-3">
+              <div class="upload-image-container"></div>
+              <textarea
+                class="form-control"
+                id="description-input"
+                placeholder="Введите описание поста"
+                rows="4"
+              ></textarea>
+              <div id="form-error" class="text-danger small"></div>
+              <button class="btn btn-primary w-100" id="add-button">Добавить</button>
+            </div>
           </div>
         </div>
       </div>
