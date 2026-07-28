@@ -1,37 +1,120 @@
-import { renderHeaderComponent } from "./header-component.js";
 
-/**
- * Компонент страницы загрузки.
- * Этот компонент отображает страницу с индикатором загрузки и заголовком.
- * Используется для отображения промежуточного состояния, пока выполняется загрузка данных или другой процесс.
- * 
- * @param {HTMLElement} params.appEl - Корневой элемент приложения, в который будет рендериться страница загрузки.
- * @param {Object} params.user - Объект пользователя, содержащий данные о текущем авторизованном пользователе (если он есть).
- * @param {Function} params.goToPage - Функция для навигации по страницам.
- */
-export function renderLoadingPageComponent({ appEl, user, goToPage }) {
-  /**
-   * HTML-разметка страницы загрузки.
-   * Содержит контейнер заголовка и индикатор загрузки.
-   */
-  const appHtml = `
-              <div class="page-container">
-                <div class="header-container"></div>
-                <div class="loading-page">
-                  <div class="loader"><div></div><div></div><div></div></div>
-                </div>
-              </div>`;
 
-  // Устанавливаем разметку в корневой элемент приложения
-  appEl.innerHTML = appHtml;
+    },
+      }
+}
 
-  /**
-   * Рендеринг заголовка с использованием компонента `renderHeaderComponent`.
-   * Передаются данные пользователя и функция навигации.
-   */
-  renderHeaderComponent({
-    user,
-    element: document.querySelector(".header-container"),
-    goToPage,
+export function getPostsByUser({ token, userId }) {
+  return fetch(`${postsHost}/user-posts/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+  })
+    .then((response) => {
+    })
+    .then((data) => {
+      return data.posts;
+    });
+}
+
+export function likePost({ token, postId }) {
+  return fetch(`${postsHost}/${postId}/like`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      if (response.status === 400) {
+        throw new Error("Нельзя лайкнуть свой пост");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data.post;
+    });
+}
+
+export function dislikePost({ token, postId }) {
+  return fetch(`${postsHost}/${postId}/dislike`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data.post;
+    });
+}
+
+export function addPost({ token, description, imageUrl }) {
+  return fetch(postsHost, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Некорректные данные");
+    }
+    return response.json();
+  });
+}
+
+export function registerUser({ login, password, name, imageUrl }) {
+  return fetch(baseHost + "/api/user", {
+    method: "POST",
+    body: JSON.stringify({
+      login,
+      password,
+      name,
+      imageUrl,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Такой пользователь уже существует");
+    }
+    return response.json();
+  });
+}
+
+export function loginUser({ login, password }) {
+  return fetch(baseHost + "/api/user/login", {
+    method: "POST",
+    body: JSON.stringify({
+      login,
+      password,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Неверный логин или пароль");
+    }
+    return response.json();
+  });
+}
+
+// Загружает картинку в облако, возвращает url загруженной картинки
+export function uploadImage({ file }) {
+  const data = new FormData();
+  data.append("file", file);
+
+  return fetch(baseHost + "/api/upload/image", {
+    method: "POST",
+    body: data,
+  }).then((response) => {
+    return response.json();
   });
 }

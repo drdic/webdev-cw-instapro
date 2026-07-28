@@ -32,9 +32,6 @@ export const logout = () => {
   goToPage(POSTS_PAGE);
 };
 
-/**
- * Включает страницу приложения
- */
 export const goToPage = (newPage, data) => {
   if (
     [
